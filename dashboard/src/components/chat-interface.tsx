@@ -10,7 +10,6 @@ import { ChatMessages } from "@/components/chat-messages";
 interface Message {
   role: "user" | "assistant";
   content: string;
-  thinking?: boolean;
 }
 
 const SUGGESTIONS = [
@@ -23,6 +22,7 @@ const SUGGESTIONS = [
 export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -36,31 +36,27 @@ export function ChatInterface() {
   useEffect(() => { textareaRef.current?.focus(); }, []);
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
 
   function handleSend(text?: string) {
     const msg = (text ?? input).trim();
-    if (!msg) return;
+    if (!msg || isLoading) return;
+
     setMessages((prev) => [...prev, { role: "user", content: msg }]);
     setInput("");
+    setIsLoading(true);
     if (textareaRef.current) textareaRef.current.style.height = "48px";
 
-    // Show thinking state
     setTimeout(() => {
-      setMessages((prev) => [...prev, { role: "assistant", content: "", thinking: true }]);
-    }, 200);
-
-    // Replace with response after delay
-    setTimeout(() => {
-      setMessages((prev) => {
-        const copy = [...prev];
-        copy[copy.length - 1] = {
+      setMessages((prev) => [
+        ...prev,
+        {
           role: "assistant",
           content: "The model has not been trained yet. Build the corpus, train the tokenizer, and run training first.",
-        };
-        return copy;
-      });
-    }, 2200);
+        },
+      ]);
+      setIsLoading(false);
+    }, 2000);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -68,38 +64,43 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col" onClick={() => textareaRef.current?.focus()}>
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        {messages.length > 0 ? (
-          <ChatMessages messages={messages} />
+        {messages.length > 0 || isLoading ? (
+          <ChatMessages messages={messages} isLoading={isLoading} />
         ) : (
           <EmptyState onSuggestionClick={handleSend} />
         )}
       </div>
 
-      <div className="px-4 pb-5 pt-3">
+      <div className="px-4 pb-5 pt-3" onClick={(e) => e.stopPropagation()}>
         <div className="mx-auto max-w-2xl">
-          <div className="relative rounded-xl border border-border bg-card">
+          <div className="relative rounded-2xl border border-border bg-card">
             <Textarea
               ref={textareaRef}
               value={input}
               onChange={(e) => { setInput(e.target.value); adjustHeight(); }}
               onKeyDown={handleKeyDown}
               placeholder="Ask about pre-1905 physics..."
+              disabled={isLoading}
               className={cn(
-                "w-full resize-none border-none bg-transparent px-4 pt-3.5 pb-3.5 pr-14 text-sm",
+                "w-full resize-none border-none bg-transparent px-4 pt-3.5 pb-3.5 pr-14 text-sm rounded-2xl",
                 "focus-visible:ring-0 focus-visible:ring-offset-0",
                 "placeholder:text-muted-foreground",
-                "min-h-[48px] max-h-[200px]"
+                "min-h-[48px] max-h-[200px]",
+                isLoading && "opacity-50"
               )}
               style={{ overflow: "hidden" }}
             />
             <button
               type="button"
-              onClick={() => handleSend()}
+              onClick={(e) => { e.stopPropagation(); handleSend(); }}
+              disabled={isLoading || !input.trim()}
               className={cn(
-                "absolute right-3 bottom-3 flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-150",
-                input.trim() ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                "absolute right-3 bottom-3 flex h-8 w-8 items-center justify-center rounded-xl transition-all duration-150",
+                input.trim() && !isLoading
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground"
               )}
             >
               <ArrowUpIcon className="h-4 w-4" />
@@ -130,7 +131,7 @@ function EmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) =
             <button
               key={s}
               onClick={() => onSuggestionClick(s)}
-              className="rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
+              className="rounded-xl border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
             >
               {s}
             </button>

@@ -26,33 +26,24 @@ export function Sidebar() {
 
   return (
     <aside className="relative flex h-screen w-[220px] shrink-0 flex-col">
-      {/* Layer 1: heavy blur on the left, fading to no blur on right */}
-      {[64, 48, 32, 20, 12, 6].map((blur, i, arr) => {
-        const start = (i / arr.length) * 100;
-        const end = ((i + 1) / arr.length) * 100;
-        return (
-          <div
-            key={blur}
-            className="pointer-events-none absolute inset-0 z-0"
-            style={{
-              backdropFilter: `blur(${blur}px)`,
-              WebkitBackdropFilter: `blur(${blur}px)`,
-              maskImage: `linear-gradient(to right, transparent ${start}%, black ${start + 2}%, black ${end - 2}%, transparent ${end}%)`,
-              WebkitMaskImage: `linear-gradient(to right, transparent ${start}%, black ${start + 2}%, black ${end - 2}%, transparent ${end}%)`,
-            }}
-          />
-        );
-      })}
-      {/* Layer 2: very subtle dark tint so text is readable */}
+      {/* Single blur layer masked to fade right */}
       <div
-        className="pointer-events-none absolute inset-0 z-0"
+        className="absolute inset-0 z-0 backdrop-blur-2xl backdrop-saturate-150"
         style={{
-          background: "linear-gradient(to right, rgba(17,17,17,0.5) 0%, rgba(17,17,17,0.2) 60%, transparent 100%)",
+          maskImage: "linear-gradient(to right, black, black 60%, transparent)",
+          WebkitMaskImage: "linear-gradient(to right, black, black 60%, transparent)",
+        }}
+      />
+      {/* Dark tint */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: "linear-gradient(to right, rgba(17,17,17,0.7), rgba(17,17,17,0.4) 70%, transparent)",
         }}
       />
 
       <div className="relative z-10 flex flex-1 flex-col">
-        <Link href="/" className="flex items-center gap-2.5 px-4 pt-5 pb-6 hover:opacity-80 transition-opacity">
+        <Link href="/" className="flex items-center gap-2.5 px-4 pt-5 pb-6 transition-opacity hover:opacity-80">
           <Image src="/einsteinai.svg" alt="Einstein AI" width={24} height={24} className="rounded" />
           <span className="text-sm font-semibold tracking-tight text-foreground">Einstein AI</span>
         </Link>
@@ -65,16 +56,14 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center gap-2.5 px-3 py-1.5 text-[13px] rounded transition-colors duration-150",
-                  active
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                  "relative flex items-center gap-2.5 px-3 py-1.5 text-[13px] rounded-lg transition-colors duration-150",
+                  active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {active && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 h-3.5 w-[2px] rounded-full bg-foreground" />
                 )}
-                <item.icon className="h-[15px] w-[15px] shrink-0" />
+                <item.icon className="h-4 w-4 shrink-0" />
                 {item.label}
               </Link>
             );
@@ -88,7 +77,7 @@ export function Sidebar() {
             rel="noopener noreferrer"
             className="flex items-center gap-2.5 px-3 py-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
           >
-            <Github className="h-[15px] w-[15px] shrink-0" />
+            <Github className="h-4 w-4 shrink-0" />
             GitHub
           </a>
         </div>
