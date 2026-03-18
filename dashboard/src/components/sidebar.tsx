@@ -9,7 +9,6 @@ import {
   Database,
   Cpu,
   ShieldCheck,
-  FlaskConical,
 } from "lucide-react";
 
 const navItems = [
@@ -24,20 +23,17 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-[220px] flex-col border-r border-border bg-card">
-      <div className="flex items-center gap-3 px-5 py-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-          <FlaskConical className="h-5 w-5" />
-        </div>
-        <div>
-          <h1 className="text-sm font-semibold tracking-tight">Einstein AI</h1>
-          <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-            Pre-1905
-          </p>
-        </div>
+    <aside className="flex h-screen w-[240px] flex-col border-r border-border bg-sidebar">
+      <div className="px-5 pt-6 pb-4">
+        <h1 className="text-base font-semibold tracking-tight text-foreground">
+          Einstein AI
+        </h1>
+        <p className="mt-0.5 text-[11px] font-medium tracking-widest uppercase text-muted-foreground">
+          Pre-1905 model
+        </p>
       </div>
 
-      <nav className="flex-1 space-y-0.5 px-2 py-2">
+      <nav className="flex-1 space-y-0.5 px-3">
         {navItems.map((item) => {
           const active = pathname === item.href;
           return (
@@ -45,13 +41,13 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                "flex items-center gap-3 rounded-md px-3 py-2 text-[13px] transition-colors duration-150",
                 active
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-sidebar-accent text-primary font-medium"
+                  : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground"
               )}
             >
-              <item.icon className="h-4 w-4" />
+              <item.icon className="h-4 w-4 shrink-0" />
               {item.label}
             </Link>
           );
@@ -59,15 +55,15 @@ export function Sidebar() {
       </nav>
 
       <div className="border-t border-border px-4 py-4">
-        <div className="rounded-lg bg-primary/5 px-3 py-2.5">
+        <div className="rounded-md border border-primary/20 bg-primary/5 px-3 py-2.5">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-amber" />
-            <span className="text-xs font-medium text-primary">
-              Sources after 1905 blocked
+            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+            <span className="text-[11px] font-medium text-primary">
+              Temporal gate active
             </span>
           </div>
-          <p className="mt-1 text-[10px] text-muted-foreground">
-            Strict temporal boundary enforced
+          <p className="mt-1 text-[10px] leading-relaxed text-muted-foreground">
+            All sources after April 30, 1905 are blocked.
           </p>
         </div>
       </div>

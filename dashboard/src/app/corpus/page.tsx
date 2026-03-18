@@ -6,7 +6,7 @@ import { Database, FileText, Lock, CheckCircle } from "lucide-react";
 
 export default function CorpusPage() {
   return (
-    <div className="p-6 lg:p-8">
+    <div className="mx-auto max-w-[1200px] p-6 lg:p-8">
       <PageHeader
         title="Corpus"
         description="All training data must be published on or before April 30, 1905."

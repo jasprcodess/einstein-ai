@@ -3,79 +3,75 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const TIMELINE_ITEMS = [
-  { year: "1687", event: "Newton's Principia Mathematica", status: "eligible" as const },
-  { year: "1865", event: "Maxwell's electromagnetic theory", status: "eligible" as const },
-  { year: "1887", event: "Michelson-Morley experiment", status: "eligible" as const },
-  { year: "1900", event: "Planck's quantum hypothesis", status: "eligible" as const },
-  { year: "1905", event: "Einstein's special relativity", status: "blocked" as const },
-  { year: "1915", event: "Einstein's general relativity", status: "blocked" as const },
+const TIMELINE = [
+  { year: "1687", event: "Newton's Principia Mathematica", ok: true },
+  { year: "1865", event: "Maxwell's electromagnetic theory", ok: true },
+  { year: "1887", event: "Michelson-Morley experiment", ok: true },
+  { year: "1900", event: "Planck's quantum hypothesis", ok: true },
+  { year: "1905", event: "Einstein's special relativity", ok: false },
+  { year: "1915", event: "Einstein's general relativity", ok: false },
 ];
 
-const SYSTEM_STATUS = [
-  { label: "Corpus Pipeline", status: "Not started" },
-  { label: "Tokenizer", status: "Not trained" },
-  { label: "Model Weights", status: "Not initialized" },
-  { label: "Evaluation Suite", status: "Not configured" },
-  { label: "Chat Inference", status: "Offline" },
+const STATUS = [
+  { label: "Corpus Pipeline", value: "Not started" },
+  { label: "Tokenizer", value: "Not trained" },
+  { label: "Model Weights", value: "Not initialized" },
+  { label: "Evaluation Suite", value: "Not configured" },
+  { label: "Chat Inference", value: "Offline" },
 ];
 
 export function OverviewCards() {
   return (
     <div className="mt-6 grid gap-4 lg:grid-cols-2">
-      <Card>
+      <Card className="border-border/60">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">
-            Temporal Boundary
-          </CardTitle>
+          <CardTitle className="text-sm font-medium">Temporal Boundary</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          {TIMELINE_ITEMS.map((item) => (
+        <CardContent className="space-y-1.5">
+          {TIMELINE.map((item) => (
             <div
               key={item.year}
-              className="flex items-center justify-between rounded-md bg-muted/50 px-3 py-2"
+              className="flex items-center justify-between rounded-md bg-muted/40 px-3 py-2"
             >
               <div className="flex items-center gap-3">
-                <span className="w-10 font-mono text-xs text-muted-foreground">
+                <span className="w-10 font-mono text-xs text-muted-foreground tabular-nums">
                   {item.year}
                 </span>
-                <span className="text-sm">{item.event}</span>
+                <span className="text-[13px]">{item.event}</span>
               </div>
               <Badge
-                variant={item.status === "eligible" ? "default" : "destructive"}
-                className="text-[10px]"
+                variant={item.ok ? "secondary" : "destructive"}
+                className="text-[10px] font-medium"
               >
-                {item.status === "eligible" ? "Eligible" : "Blocked"}
+                {item.ok ? "Eligible" : "Blocked"}
               </Badge>
             </div>
           ))}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-border/60">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium">System Status</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          {SYSTEM_STATUS.map((item) => (
+        <CardContent className="space-y-1.5">
+          {STATUS.map((item) => (
             <div
               key={item.label}
-              className="flex items-center justify-between rounded-md bg-muted/50 px-3 py-2"
+              className="flex items-center justify-between rounded-md bg-muted/40 px-3 py-2"
             >
-              <span className="text-sm">{item.label}</span>
-              <span className="text-xs text-muted-foreground">
-                {item.status}
-              </span>
+              <span className="text-[13px]">{item.label}</span>
+              <span className="text-xs text-muted-foreground">{item.value}</span>
             </div>
           ))}
 
-          <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3">
-            <p className="text-xs font-medium text-primary">
+          <div className="mt-3 rounded-md border border-primary/15 bg-primary/5 px-3 py-2.5">
+            <p className="text-[11px] font-medium text-primary">
               Clean-Room Protocol Active
             </p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
+            <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
               All learned components restricted to pre-1905 verified sources.
-              No pretrained weights, tokenizers, or external knowledge allowed.
+              No pretrained weights, tokenizers, or external knowledge.
             </p>
           </div>
         </CardContent>

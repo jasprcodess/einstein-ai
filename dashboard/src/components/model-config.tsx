@@ -8,43 +8,39 @@ const CONFIG = [
   { key: "Hidden Size", value: "768" },
   { key: "Attention Heads", value: "12" },
   { key: "FFN Dimension", value: "3072" },
-  { key: "Vocab Size", value: "16,000 (BPE from corpus)" },
-  { key: "Context Length", value: "512 tokens" },
+  { key: "Vocab Size", value: "16,000 (BPE)" },
+  { key: "Context Length", value: "512" },
   { key: "Positional Encoding", value: "RoPE" },
-  { key: "Normalization", value: "RMSNorm (pre-norm)" },
-  { key: "Precision", value: "bf16 mixed" },
+  { key: "Normalization", value: "RMSNorm" },
+  { key: "Precision", value: "bf16" },
   { key: "Optimizer", value: "8-bit AdamW" },
   { key: "Total Parameters", value: "~112M" },
 ];
 
 export function ModelConfig() {
   return (
-    <Card>
+    <Card className="border-border/60">
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-medium">
-          Model Architecture
-        </CardTitle>
+        <CardTitle className="text-sm font-medium">Model Architecture</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-1.5">
-          {CONFIG.map((item) => (
+        <div className="space-y-1">
+          {CONFIG.map((c) => (
             <div
-              key={item.key}
-              className="flex items-center justify-between rounded-md bg-muted/50 px-3 py-2"
+              key={c.key}
+              className="flex items-center justify-between rounded-md bg-muted/40 px-3 py-2"
             >
-              <span className="text-xs text-muted-foreground">{item.key}</span>
-              <span className="font-mono text-xs">{item.value}</span>
+              <span className="text-[12px] text-muted-foreground">{c.key}</span>
+              <span className="font-mono text-[12px] tabular-nums">{c.value}</span>
             </div>
           ))}
         </div>
 
-        <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2">
-          <p className="text-xs font-medium text-primary">
-            From Scratch Guarantee
-          </p>
-          <p className="mt-0.5 text-[11px] text-muted-foreground">
-            All weights randomly initialized. No pretrained model, tokenizer, or
-            embeddings used. Tokenizer trained only on approved pre-1905 corpus.
+        <div className="mt-4 rounded-md border border-primary/15 bg-primary/5 px-3 py-2.5">
+          <p className="text-[11px] font-medium text-primary">From-Scratch Guarantee</p>
+          <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
+            All weights randomly initialized. No pretrained model, tokenizer,
+            or embeddings. Tokenizer trained only on approved pre-1905 corpus.
           </p>
         </div>
       </CardContent>

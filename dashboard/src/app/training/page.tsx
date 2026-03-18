@@ -1,12 +1,12 @@
 import { PageHeader } from "@/components/page-header";
-import { TrainingPanel } from "@/components/training-panel";
 import { ModelConfig } from "@/components/model-config";
+import { TrainingPanel } from "@/components/training-panel";
 import { StatCard } from "@/components/stat-card";
 import { Cpu, Timer, Zap, HardDrive } from "lucide-react";
 
 export default function TrainingPage() {
   return (
-    <div className="p-6 lg:p-8">
+    <div className="mx-auto max-w-[1200px] p-6 lg:p-8">
       <PageHeader
         title="Training"
         description="Train the model from random initialization on pre-1905 data only."
