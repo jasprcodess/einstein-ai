@@ -1,2 +1,4 @@
 NUL
 .training-state.json
+corpus/corpus.db
+corpus/data/

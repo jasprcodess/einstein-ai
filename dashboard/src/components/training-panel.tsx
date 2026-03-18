@@ -22,36 +22,47 @@ export function TrainingPanel() {
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-medium">Training Run</CardTitle>
             <Badge variant={isRunning ? "default" : "secondary"} className="text-xs">
-              {status === "idle" ? "Not started" : status === "running" ? "Training..." : "Complete"}
+              {status === "idle" ? "Not connected" : status === "running" ? "Training..." : "Complete"}
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-1.5">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
-              <span className="font-mono tabular-nums">
-                {m.step > 0 ? `${m.step} / ${m.totalSteps}` : "-- / --"}
-              </span>
+          {status === "idle" && lossHistory.length === 0 ? (
+            <div className="flex min-h-44 flex-col items-center justify-center rounded-md border border-dashed border-border px-6 text-center">
+              <p className="text-sm text-muted-foreground">No live training process connected</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Metrics appear here after we connect the real trainer.
+              </p>
             </div>
-            <Progress value={m.totalSteps > 0 ? (m.step / m.totalSteps) * 100 : 0} className="h-1.5" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { label: "Loss", value: m.loss > 0 ? m.loss.toFixed(4) : "--" },
-              { label: "Learning Rate", value: m.lr > 0 ? m.lr.toExponential(1) : "--" },
-              { label: "Tokens/sec", value: m.tokensPerSec > 0 ? Math.round(m.tokensPerSec).toLocaleString() : "--" },
-              { label: "GPU Memory", value: m.gpuMem || "--" },
-              { label: "Epoch", value: m.epoch > 0 ? m.epoch.toFixed(1) : "--" },
-              { label: "ETA", value: m.eta || "--" },
-            ].map((metric) => (
-              <div key={metric.label} className="rounded-md bg-muted px-3 py-2.5">
-                <p className="text-xs text-muted-foreground">{metric.label}</p>
-                <p className="mt-0.5 text-sm font-mono tabular-nums">{metric.value}</p>
+          ) : (
+            <>
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Progress</span>
+                  <span className="font-mono tabular-nums">
+                    {m.step > 0 ? `${m.step} / ${m.totalSteps}` : "-- / --"}
+                  </span>
+                </div>
+                <Progress value={m.totalSteps > 0 ? (m.step / m.totalSteps) * 100 : 0} className="h-1.5" />
               </div>
-            ))}
-          </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: "Loss", value: m.loss > 0 ? m.loss.toFixed(4) : "--" },
+                  { label: "Learning Rate", value: m.lr > 0 ? m.lr.toExponential(1) : "--" },
+                  { label: "Tokens/sec", value: m.tokensPerSec > 0 ? Math.round(m.tokensPerSec).toLocaleString() : "--" },
+                  { label: "GPU Memory", value: m.gpuMem || "--" },
+                  { label: "Epoch", value: m.epoch > 0 ? m.epoch.toFixed(1) : "--" },
+                  { label: "ETA", value: m.eta || "--" },
+                ].map((metric) => (
+                  <div key={metric.label} className="rounded-md bg-muted px-3 py-2.5">
+                    <p className="text-xs text-muted-foreground">{metric.label}</p>
+                    <p className="mt-0.5 text-sm font-mono tabular-nums">{metric.value}</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
 
           {isRunning ? (
             <Button className="w-full h-11 gap-2 text-sm" variant="destructive" onClick={stop}>
@@ -59,9 +70,9 @@ export function TrainingPanel() {
               Stop Training
             </Button>
           ) : (
-            <Button className="w-full h-11 gap-2 text-sm" variant="secondary" onClick={start} disabled={isDone}>
+            <Button className="w-full h-11 gap-2 text-sm" variant="secondary" onClick={start}>
               {isDone ? <Lock className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              {isDone ? "Training Complete" : "Start Training"}
+              {isDone ? "Replay Demo" : "Start Training"}
             </Button>
           )}
         </CardContent>
