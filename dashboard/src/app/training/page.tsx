@@ -10,7 +10,7 @@ export default function TrainingPage() {
         description="Train the model from random initialization on pre-1905 data only."
       />
 
-      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 items-start">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 items-stretch">
         <ModelConfig />
         <TrainingPanel />
       </div>

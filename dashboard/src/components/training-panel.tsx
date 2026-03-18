@@ -16,7 +16,7 @@ export function TrainingPanel() {
   const m = rawMetrics ?? { step: 0, totalSteps: 0, loss: 0, lr: 0, tokensPerSec: 0, gpuMem: "", epoch: 0, eta: "" };
 
   return (
-    <div className="space-y-4">
+    <div className="flex h-full flex-col space-y-4">
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -67,11 +67,11 @@ export function TrainingPanel() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="flex-1 flex flex-col">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium">Loss Curve</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 flex flex-col justify-center">
           {lossHistory.length > 0 ? (
             <LossChart data={lossHistory} />
           ) : (

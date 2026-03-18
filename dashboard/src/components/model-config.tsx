@@ -19,7 +19,7 @@ const CONFIG = [
 
 export function ModelConfig() {
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader className="pb-3">
         <CardTitle className="text-sm font-medium">Model Architecture</CardTitle>
       </CardHeader>

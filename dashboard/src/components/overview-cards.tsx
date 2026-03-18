@@ -12,12 +12,12 @@ const STATUS = [
 
 export function OverviewCards() {
   return (
-    <div className="mt-6 grid gap-4 lg:grid-cols-2 items-start">
-      <Card>
+    <div className="mt-6 grid gap-4 lg:grid-cols-2 items-stretch">
+      <Card className="flex h-full flex-col transition-all duration-200 ease-out hover:-translate-y-0.5">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium">System Status</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="flex flex-1 flex-col space-y-2">
           {STATUS.map((item) => (
             <div
               key={item.label}
@@ -30,11 +30,11 @@ export function OverviewCards() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="flex h-full flex-col">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium">About This Project</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="flex flex-1 flex-col space-y-4">
           <div className="rounded-md border border-border bg-muted px-4 py-3">
             <p className="text-sm font-medium text-foreground">Clean-Room Protocol</p>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">

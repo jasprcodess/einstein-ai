@@ -40,6 +40,7 @@ export function MobileNav() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   onClick={() => setOpen(false)}
                   className={cn(
                     "flex items-center gap-3 rounded-md px-4 py-3 text-sm min-h-[48px] transition-colors",
