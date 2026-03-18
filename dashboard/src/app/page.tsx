@@ -1,23 +1,29 @@
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { HorizontalBars } from "@/components/interactive-bar";
 import { getCorpusStats, getCorpusAuthors, getCorpusYearBuckets } from "@/lib/corpus-db";
+import { getPipelineState } from "@/lib/pipeline-state";
 
 export default function OverviewPage() {
   const stats = getCorpusStats();
   const authors = getCorpusAuthors();
   const years = getCorpusYearBuckets();
+  const pipeline = getPipelineState();
 
   const steps = [
     { label: "Corpus", desc: "Collect pre-1905 texts", done: stats.totalDocuments > 0, detail: `${stats.totalDocuments} docs · ${stats.totalTokens.toLocaleString()} tokens` },
-    { label: "Tokenizer", desc: "Build BPE from corpus", done: false, detail: null },
-    { label: "Training", desc: "Train transformer from scratch", done: false, detail: null },
-    { label: "Evaluation", desc: "Test temporal boundary", done: false, detail: null },
-    { label: "Chat", desc: "Connect model for inference", done: false, detail: null },
+    { label: "Tokenizer", desc: "Build BPE from corpus", done: pipeline.tokenizer, detail: pipeline.tokenizer ? "tokenizer.model" : null },
+    { label: "Training", desc: "Train transformer from scratch", done: pipeline.training, detail: pipeline.trainingDetail },
+    { label: "Chat", desc: "Connect model for inference", done: pipeline.checkpoint, detail: pipeline.checkpoint ? "final.pt ready" : null },
   ];
 
   const completed = steps.filter((s) => s.done).length;
-  const maxAuthorTokens = Math.max(...authors.map((a) => a.tokens), 1);
+  const authorItems = authors.map((a) => ({
+    label: a.author,
+    value: a.tokens,
+    detail: `${(a.tokens / 1000).toFixed(0)}k`,
+  }));
 
   return (
     <div className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
@@ -59,18 +65,10 @@ export default function OverviewPage() {
               <Badge variant="outline" className="text-xs">{authors.length}</Badge>
             </div>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {authors.length > 0 ? authors.map((a) => (
-              <div key={a.author} className="space-y-1">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-sm">{a.author}</span>
-                  <span className="text-xs tabular-nums text-muted-foreground">{(a.tokens / 1000).toFixed(0)}k</span>
-                </div>
-                <div className="h-1 rounded-full bg-muted">
-                  <div className="h-1 rounded-full bg-primary" style={{ width: `${Math.max(4, (a.tokens / maxAuthorTokens) * 100)}%` }} />
-                </div>
-              </div>
-            )) : (
+          <CardContent>
+            {authorItems.length > 0 ? (
+              <HorizontalBars items={authorItems} />
+            ) : (
               <p className="text-sm text-muted-foreground py-8 text-center">No corpus data yet</p>
             )}
           </CardContent>

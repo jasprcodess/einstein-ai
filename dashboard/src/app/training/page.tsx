@@ -3,7 +3,7 @@ import { TrainingPanel } from "@/components/training-panel";
 
 export default function TrainingPage() {
   return (
-    <div className="mx-auto max-w-3xl p-4 sm:p-6 lg:p-8">
+    <div className="mx-auto max-w-4xl p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Training"
         description="Train from scratch on pre-1905 physics data."

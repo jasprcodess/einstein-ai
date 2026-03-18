@@ -12,15 +12,25 @@ interface Message {
   content: string;
 }
 
-const SUGGESTIONS = [
-  "What is the luminiferous ether?",
-  "Explain Maxwell's equations",
-  "Describe the Michelson-Morley experiment",
-  "What are Newton's laws of motion?",
-];
+interface ChatSession {
+  id: string;
+  title: string;
+  messages: Message[];
+}
 
-export function ChatInterface() {
-  const [messages, setMessages] = useState<Message[]>([]);
+function generateId() {
+  return `chat_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+export function ChatInterface({
+  initialChat,
+  onSaved,
+}: {
+  initialChat?: ChatSession | null;
+  onSaved?: () => void;
+}) {
+  const [chatId] = useState(() => initialChat?.id ?? generateId());
+  const [messages, setMessages] = useState<Message[]>(initialChat?.messages ?? []);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -33,45 +43,59 @@ export function ChatInterface() {
     el.style.height = `${Math.min(Math.max(48, el.scrollHeight), 200)}px`;
   }, []);
 
-  useEffect(() => {
-    textareaRef.current?.focus();
+  useEffect(() => { textareaRef.current?.focus(); }, []);
 
-    // Global listener to capture typing anywhere
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      // Don't steal focus if they are copying/pasting or using command combos
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      // Don't steal focus if they are interacting with another input (if there were any)
-      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
-      
-      textareaRef.current?.focus();
-    };
-
-    window.addEventListener('keydown', handleGlobalKeyDown);
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, []);
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isLoading]);
 
-  function handleSend(text?: string) {
-    const msg = (text ?? input).trim();
+  // Save chat to history whenever messages change
+  const saveChat = useCallback(async (msgs: Message[]) => {
+    if (msgs.length === 0) return;
+    const firstUserMsg = msgs.find((m) => m.role === "user");
+    const title = firstUserMsg?.content.slice(0, 50) || "Untitled";
+    await fetch("/api/chat/history", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: chatId, title, messages: msgs }),
+    });
+    onSaved?.();
+  }, [chatId, onSaved]);
+
+  async function handleSend() {
+    const msg = input.trim();
     if (!msg || isLoading) return;
 
-    setMessages((prev) => [...prev, { role: "user", content: msg }]);
+    const newMessages = [...messages, { role: "user" as const, content: msg }];
+    setMessages(newMessages);
     setInput("");
     setIsLoading(true);
     if (textareaRef.current) textareaRef.current.style.height = "48px";
 
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "The model has not been trained yet. Build the corpus, train the tokenizer, and run training first.",
-        },
-      ]);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: msg, messages }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        // Show error but don't save it to history
+        setMessages([...newMessages, { role: "assistant" as const, content: `Error: ${data.error || "Request failed"}` }]);
+      } else {
+        const withReply = [
+          ...newMessages,
+          { role: "assistant" as const, content: data.text ?? "No response." },
+        ];
+        setMessages(withReply);
+        saveChat(withReply);
+      }
+    } catch {
+      setMessages([...newMessages, { role: "assistant" as const, content: "Error: Failed to reach inference backend." }]);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -79,16 +103,16 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="flex h-full flex-col" onClick={() => textareaRef.current?.focus()}>
+    <div className="flex h-full flex-col">
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {messages.length > 0 || isLoading ? (
           <ChatMessages messages={messages} isLoading={isLoading} />
         ) : (
-          <EmptyState onSuggestionClick={handleSend} />
+          <EmptyState />
         )}
       </div>
 
-      <div className="px-4 pb-5 pt-3" onClick={(e) => e.stopPropagation()}>
+      <div className="px-4 pb-5 pt-3">
         <div className="mx-auto max-w-2xl">
           <div className="relative rounded-xl border border-border bg-card shadow-sm transition-shadow focus-within:ring-1 focus-within:ring-primary/20">
             <Textarea
@@ -96,7 +120,7 @@ export function ChatInterface() {
               value={input}
               onChange={(e) => { setInput(e.target.value); adjustHeight(); }}
               onKeyDown={handleKeyDown}
-              placeholder="Ask about pre-1905 physics..."
+              placeholder="Ask about pre-1905 science..."
               disabled={isLoading}
               className={cn(
                 "w-full resize-none border-none bg-transparent px-4 pt-3.5 pb-3.5 pr-12 text-sm rounded-xl",
@@ -109,8 +133,9 @@ export function ChatInterface() {
             />
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); handleSend(); }}
+              onClick={handleSend}
               disabled={isLoading || !input.trim()}
+              aria-label="Send message"
               className={cn(
                 "absolute right-2 bottom-2.5 flex h-[30px] w-[30px] items-center justify-center rounded-md transition-all duration-150",
                 input.trim() && !isLoading
@@ -130,7 +155,7 @@ export function ChatInterface() {
   );
 }
 
-function EmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) => void }) {
+function EmptyState() {
   return (
     <div className="flex h-full flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-lg text-center">
@@ -141,17 +166,6 @@ function EmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) =
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
           A language model trained from scratch on data published before April 30, 1905.
         </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-2.5">
-          {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => onSuggestionClick(s)}
-              className="rounded-lg border border-border bg-card px-3.5 py-1.5 text-[13px] text-muted-foreground shadow-sm transition-all duration-200 hover:bg-accent hover:text-foreground hover:shadow-md hover:-translate-y-[1px] active:translate-y-0"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

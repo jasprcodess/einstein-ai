@@ -1,4 +1,39 @@
-NUL
+# Runtime state
 .training-state.json
+.training-pid
+.training-archive/
+.evaluation-results.json
+.chat-history/
+
+# Corpus artifacts
 corpus/corpus.db
+corpus/corpus.db-shm
+corpus/corpus.db-wal
 corpus/data/
+corpus/checkpoints/
+corpus/tokenizer.model
+corpus/tokenizer.vocab
+corpus/_combined.txt
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+
+# Next.js
+dashboard/.next/
+dashboard/node_modules/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# OS / IDE
+NUL
+.DS_Store
+*.swp
+.idea/
+.vscode/

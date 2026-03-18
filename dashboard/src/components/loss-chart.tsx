@@ -1,9 +1,20 @@
 "use client";
 
-const PAD = { top: 8, right: 12, bottom: 24, left: 48 };
-const H = 160;
+import { useState, useRef, useCallback } from "react";
 
-export function LossChart({ data }: { data: Array<{ step: number; loss: number }> }) {
+const PAD = { top: 12, right: 16, bottom: 28, left: 52 };
+const H = 180;
+
+interface Point {
+  step: number;
+  loss: number;
+}
+
+export function LossChart({ data }: { data: Point[] }) {
+  const [hover, setHover] = useState<Point | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const svgRef = useRef<SVGSVGElement>(null);
+
   if (data.length < 2) return null;
 
   const steps = data.map((d) => d.step);
@@ -13,7 +24,7 @@ export function LossChart({ data }: { data: Array<{ step: number; loss: number }
   const lossRange = maxLoss - minLoss || 1;
   const stepRange = maxStep - minStep || 1;
 
-  const w = 1000; // viewBox width; scales responsively
+  const w = 1000;
   const cw = w - PAD.left - PAD.right;
   const ch = H - PAD.top - PAD.bottom;
 
@@ -39,34 +50,94 @@ export function LossChart({ data }: { data: Array<{ step: number; loss: number }
     { x: toX(maxStep), label: String(maxStep) },
   ];
 
-  return (
-    <svg viewBox={`0 0 ${w} ${H}`} className="w-full h-40" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="lossFill" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="#a0a0a0" stopOpacity={0.2} />
-          <stop offset="100%" stopColor="#a0a0a0" stopOpacity={0} />
-        </linearGradient>
-      </defs>
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<SVGSVGElement>) => {
+      const svg = svgRef.current;
+      if (!svg) return;
+      const rect = svg.getBoundingClientRect();
+      const relX = ((e.clientX - rect.left) / rect.width) * w;
+      const stepVal = minStep + ((relX - PAD.left) / cw) * stepRange;
 
-      {yTicks.map((t) => (
-        <g key={t.label}>
-          <line x1={PAD.left} x2={w - PAD.right} y1={t.y} y2={t.y} stroke="#2a2a2a" />
-          <text x={PAD.left - 6} y={t.y + 3} textAnchor="end" fill="#808080" fontSize={10}
+      let closest = data[0];
+      let closestDist = Infinity;
+      for (const d of data) {
+        const dist = Math.abs(d.step - stepVal);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = d;
+        }
+      }
+      setHover(closest);
+      setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    },
+    [data, minStep, stepRange, cw, w]
+  );
+
+  return (
+    <div className="relative">
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${w} ${H}`}
+        className="w-full h-44"
+        preserveAspectRatio="none"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => setHover(null)}
+      >
+        <defs>
+          <linearGradient id="lossFill" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="currentColor" stopOpacity={0.15} />
+            <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+
+        {yTicks.map((t) => (
+          <g key={t.label}>
+            <line x1={PAD.left} x2={w - PAD.right} y1={t.y} y2={t.y} className="stroke-border" />
+            <text x={PAD.left - 6} y={t.y + 3} textAnchor="end" className="fill-muted-foreground" fontSize={10}
+              fontFamily="monospace" style={{ fontVariantNumeric: "tabular-nums" }}>
+              {t.label}
+            </text>
+          </g>
+        ))}
+
+        {xTicks.map((t) => (
+          <text key={t.label} x={t.x} y={H - 4} textAnchor="middle" className="fill-muted-foreground" fontSize={10}
             fontFamily="monospace" style={{ fontVariantNumeric: "tabular-nums" }}>
             {t.label}
           </text>
-        </g>
-      ))}
+        ))}
 
-      {xTicks.map((t) => (
-        <text key={t.label} x={t.x} y={H - 4} textAnchor="middle" fill="#808080" fontSize={10}
-          fontFamily="monospace" style={{ fontVariantNumeric: "tabular-nums" }}>
-          {t.label}
-        </text>
-      ))}
+        <path d={areaPath} fill="url(#lossFill)" />
+        <polyline points={pts} fill="none" className="stroke-foreground/60" strokeWidth={2} vectorEffect="non-scaling-stroke" />
 
-      <path d={areaPath} fill="url(#lossFill)" />
-      <polyline points={pts} fill="none" stroke="#a0a0a0" strokeWidth={2} vectorEffect="non-scaling-stroke" />
-    </svg>
+        {hover && (
+          <>
+            <line
+              x1={toX(hover.step)} x2={toX(hover.step)}
+              y1={PAD.top} y2={PAD.top + ch}
+              className="stroke-muted-foreground/50" strokeWidth={1} strokeDasharray="4,4" vectorEffect="non-scaling-stroke"
+            />
+            <circle
+              cx={toX(hover.step)} cy={toY(hover.loss)}
+              r={5} className="fill-background stroke-foreground/60" strokeWidth={2}
+              vectorEffect="non-scaling-stroke"
+            />
+          </>
+        )}
+      </svg>
+
+      {hover && (
+        <div
+          className="pointer-events-none absolute z-10 rounded-md border border-border bg-popover px-3 py-2 shadow-lg"
+          style={{
+            left: Math.min(mousePos.x + 12, (svgRef.current?.getBoundingClientRect().width ?? 300) - 130),
+            top: mousePos.y - 50,
+          }}
+        >
+          <p className="text-xs text-muted-foreground">Step {hover.step}</p>
+          <p className="text-sm font-mono tabular-nums font-medium">{hover.loss.toFixed(4)}</p>
+        </div>
+      )}
+    </div>
   );
 }

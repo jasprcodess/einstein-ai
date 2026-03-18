@@ -5,14 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Menu, X, LayoutDashboard, MessageCircle, Database, Cpu, ShieldCheck } from "lucide-react";
+import { Menu, X, LayoutDashboard, MessageCircle, Database, Cpu, Settings } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
-  { href: "/chat", label: "Chat", icon: MessageCircle },
   { href: "/corpus", label: "Corpus", icon: Database },
   { href: "/training", label: "Training", icon: Cpu },
-  { href: "/evaluation", label: "Evaluation", icon: ShieldCheck },
+  { href: "/chat", label: "Chat", icon: MessageCircle },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function MobileNav() {

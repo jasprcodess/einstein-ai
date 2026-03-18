@@ -6,19 +6,18 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
-  MessageCircle,
   Database,
   Cpu,
-  ShieldCheck,
+  MessageCircle,
+  Settings,
   Github,
 } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
-  { href: "/chat", label: "Chat", icon: MessageCircle },
   { href: "/corpus", label: "Corpus", icon: Database },
   { href: "/training", label: "Training", icon: Cpu },
-  { href: "/evaluation", label: "Evaluation", icon: ShieldCheck },
+  { href: "/chat", label: "Chat", icon: MessageCircle },
 ];
 
 export function Sidebar() {
@@ -26,7 +25,6 @@ export function Sidebar() {
 
   return (
     <aside className="relative flex h-screen w-[220px] shrink-0 flex-col">
-      {/* Single blur layer masked to fade right */}
       <div
         className="absolute inset-0 z-0 backdrop-blur-2xl backdrop-saturate-150"
         style={{
@@ -34,7 +32,6 @@ export function Sidebar() {
           WebkitMaskImage: "linear-gradient(to right, black, black 60%, transparent)",
         }}
       />
-      {/* Dark tint */}
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -71,7 +68,20 @@ export function Sidebar() {
           })}
         </nav>
 
-        <div className="px-3 pb-4">
+        <div className="px-3 pb-4 space-y-0.5">
+          <Link
+            href="/settings"
+            className={cn(
+              "relative flex items-center gap-2.5 px-3 py-1.5 text-[13px] rounded-lg transition-colors duration-150",
+              pathname === "/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            {pathname === "/settings" && (
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-3.5 w-[2px] rounded-full bg-foreground" />
+            )}
+            <Settings className="h-4 w-4 shrink-0" />
+            Settings
+          </Link>
           <a
             href="https://github.com/jasprcodess/einstein-ai"
             target="_blank"
