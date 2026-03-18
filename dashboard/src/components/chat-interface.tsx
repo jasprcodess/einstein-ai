@@ -72,7 +72,7 @@ export function ChatInterface() {
         )}
       </div>
 
-      <div className="border-t border-border px-4 pb-5 pt-3">
+      <div className="px-4 pb-5 pt-3">
         <div className="mx-auto max-w-2xl">
           <div className="relative rounded-xl border border-border bg-card">
             <Textarea
@@ -87,7 +87,7 @@ export function ChatInterface() {
               className={cn(
                 "w-full resize-none border-none bg-transparent px-4 pt-3 pb-3 pr-12 text-sm",
                 "focus-visible:ring-0 focus-visible:ring-offset-0",
-                "placeholder:text-muted-foreground/50",
+                "placeholder:text-muted-foreground",
                 "min-h-[44px] max-h-[200px]"
               )}
               style={{ overflow: "hidden" }}
@@ -105,7 +105,7 @@ export function ChatInterface() {
               <ArrowUpIcon className="h-3.5 w-3.5" />
             </button>
           </div>
-          <p className="mt-2 text-center text-[10px] text-muted-foreground/50">
+          <p className="mt-2 text-center text-[10px] text-muted-foreground">
             Enter to send · Shift+Enter for new line · Pre-1905 data only
           </p>
         </div>
@@ -118,7 +118,7 @@ function EmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) =
   return (
     <div className="flex h-full flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-lg text-center">
-        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10">
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-muted">
           <Atom className="h-7 w-7 text-primary" />
         </div>
         <h2 className="text-2xl font-semibold tracking-tight">
@@ -134,7 +134,7 @@ function EmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) =
             <button
               key={s}
               onClick={() => onSuggestionClick(s)}
-              className="rounded-full border border-border bg-card px-3.5 py-1.5 text-xs text-muted-foreground transition-colors duration-150 hover:border-primary/30 hover:text-foreground"
+              className="rounded-full border border-border bg-card px-3.5 py-1.5 text-xs text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
             >
               {s}
             </button>

@@ -21,13 +21,13 @@ export default function CorpusPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="flex h-32 items-center justify-center rounded-md bg-muted/40">
+            <div className="flex h-32 items-center justify-center rounded-md bg-muted">
               <p className="text-xs text-muted-foreground">
                 Distribution chart will appear once sources are ingested.
               </p>
             </div>
 
-            <div className="mt-4 rounded-md border border-primary/15 bg-primary/5 px-3 py-2">
+            <div className="mt-4 rounded-md border border-border bg-secondary px-3 py-2">
               <p className="text-[11px] leading-relaxed text-muted-foreground">
                 Start the corpus pipeline to collect verified pre-1905 texts
                 from public domain archives.
@@ -41,7 +41,7 @@ export default function CorpusPage() {
             <CardTitle className="text-sm font-medium">Source Registry</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex h-48 items-center justify-center rounded-md bg-muted/40">
+            <div className="flex h-48 items-center justify-center rounded-md bg-muted">
               <p className="text-xs text-muted-foreground">
                 No sources ingested yet.
               </p>

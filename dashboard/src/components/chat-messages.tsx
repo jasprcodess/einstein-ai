@@ -15,7 +15,7 @@ export function ChatMessages({ messages }: { messages: Message[] }) {
           <div
             className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
               msg.role === "assistant"
-                ? "bg-primary/10 text-primary"
+                ? "bg-secondary text-primary"
                 : "bg-muted text-muted-foreground"
             }`}
           >

@@ -38,7 +38,7 @@ export function TrainingPanel() {
 
           <div className="grid grid-cols-2 gap-2">
             {["Loss", "Learning Rate", "Tokens/sec", "GPU Memory", "Epoch", "ETA"].map((label) => (
-              <div key={label} className="rounded-md bg-muted/60 px-3 py-2">
+              <div key={label} className="rounded-md bg-muted px-3 py-2">
                 <p className="text-[10px] text-muted-foreground">{label}</p>
                 <p className="mt-0.5 font-mono text-sm tabular-nums">--</p>
               </div>
@@ -49,7 +49,7 @@ export function TrainingPanel() {
             <Play className="h-4 w-4" />
             Start Training
           </Button>
-          <p className="text-center text-[10px] text-muted-foreground/50">
+          <p className="text-center text-[10px] text-muted-foreground">
             Build the corpus and tokenizer first.
           </p>
         </CardContent>

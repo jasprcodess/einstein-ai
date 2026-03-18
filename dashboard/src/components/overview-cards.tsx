@@ -21,7 +21,7 @@ export function OverviewCards() {
           {STATUS.map((item) => (
             <div
               key={item.label}
-              className="flex items-center justify-between rounded-md bg-muted/60 px-3 py-2"
+              className="flex items-center justify-between rounded-md bg-muted px-3 py-2"
             >
               <span className="text-[13px]">{item.label}</span>
               <span className="text-xs text-muted-foreground">{item.value}</span>
@@ -35,7 +35,7 @@ export function OverviewCards() {
           <CardTitle className="text-sm font-medium">About This Project</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="rounded-md border border-primary/15 bg-primary/5 px-3 py-2.5">
+          <div className="rounded-md border border-border bg-secondary px-3 py-2.5">
             <p className="text-[11px] font-medium text-primary">
               Clean-Room Protocol
             </p>

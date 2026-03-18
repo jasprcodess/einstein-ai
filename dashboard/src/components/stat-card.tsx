@@ -11,7 +11,7 @@ interface StatCardProps {
 
 export function StatCard({ label, value, sub, icon: Icon, accent }: StatCardProps) {
   return (
-    <Card className="border-border/60">
+    <Card>
       <CardContent className="flex items-start justify-between p-5">
         <div>
           <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-muted-foreground">
@@ -28,7 +28,7 @@ export function StatCard({ label, value, sub, icon: Icon, accent }: StatCardProp
             <p className="mt-1 text-[12px] text-muted-foreground">{sub}</p>
           )}
         </div>
-        <div className="rounded-md bg-muted/60 p-2">
+        <div className="rounded-md bg-muted p-2">
           <Icon className="h-4 w-4 text-muted-foreground" />
         </div>
       </CardContent>

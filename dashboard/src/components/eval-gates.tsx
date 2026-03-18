@@ -42,7 +42,7 @@ export function EvalGates() {
           <Card key={g.label}>
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
-                <div className="rounded-md bg-muted/60 p-2">
+                <div className="rounded-md bg-muted p-2">
                   <g.icon className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <Badge variant="secondary" className="text-[10px]">
