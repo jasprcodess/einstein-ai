@@ -10,24 +10,30 @@ interface Message {
 
 export function ChatMessages({ messages, isLoading }: { messages: Message[]; isLoading: boolean }) {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6">
+    <div className="mx-auto max-w-2xl px-4 py-8">
       {messages.map((msg, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="py-3"
+          className="group py-4"
         >
           {msg.role === "assistant" ? (
-            <div className="flex gap-3">
-              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted mt-0.5">
-                <Image src="/einsteinai.svg" alt="AI" width={14} height={14} />
+            <div className="flex gap-4">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-muted border border-border shadow-sm">
+                <Image src="/einsteinai.svg" alt="AI" width={16} height={16} className="opacity-90" />
               </div>
-              <p className="text-sm leading-relaxed pt-0.5">{msg.content}</p>
+              <div className="min-w-0 flex-1 mt-0.5">
+                <p className="text-sm leading-relaxed text-foreground">{msg.content}</p>
+              </div>
             </div>
           ) : (
-            <p className="text-sm leading-relaxed text-muted-foreground">{msg.content}</p>
+            <div className="flex justify-end">
+              <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-muted px-4 py-2.5 text-[15px] leading-relaxed text-foreground shadow-sm">
+                {msg.content}
+              </div>
+            </div>
           )}
         </motion.div>
       ))}
@@ -37,13 +43,15 @@ export function ChatMessages({ messages, isLoading }: { messages: Message[]; isL
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="py-3"
+          className="py-4"
         >
-          <div className="flex gap-3">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted mt-0.5">
-              <Image src="/einsteinai.svg" alt="AI" width={14} height={14} />
+          <div className="flex gap-4">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-muted border border-border shadow-sm">
+              <Image src="/einsteinai.svg" alt="AI" width={16} height={16} className="opacity-90" />
             </div>
-            <span className="thinking-shimmer text-sm pt-0.5">Thinking</span>
+            <div className="min-w-0 flex-1 mt-1.5 flex items-center">
+              <span className="thinking-shimmer text-sm font-medium tracking-wide">Thinking</span>
+            </div>
           </div>
         </motion.div>
       )}

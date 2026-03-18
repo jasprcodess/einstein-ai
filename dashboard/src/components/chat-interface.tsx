@@ -33,7 +33,22 @@ export function ChatInterface() {
     el.style.height = `${Math.min(Math.max(48, el.scrollHeight), 200)}px`;
   }, []);
 
-  useEffect(() => { textareaRef.current?.focus(); }, []);
+  useEffect(() => {
+    textareaRef.current?.focus();
+
+    // Global listener to capture typing anywhere
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Don't steal focus if they are copying/pasting or using command combos
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // Don't steal focus if they are interacting with another input (if there were any)
+      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
+      
+      textareaRef.current?.focus();
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isLoading]);
@@ -75,7 +90,7 @@ export function ChatInterface() {
 
       <div className="px-4 pb-5 pt-3" onClick={(e) => e.stopPropagation()}>
         <div className="mx-auto max-w-2xl">
-          <div className="relative rounded-2xl border border-border bg-card">
+          <div className="relative rounded-xl border border-border bg-card shadow-sm transition-shadow focus-within:ring-1 focus-within:ring-primary/20">
             <Textarea
               ref={textareaRef}
               value={input}
@@ -84,29 +99,29 @@ export function ChatInterface() {
               placeholder="Ask about pre-1905 physics..."
               disabled={isLoading}
               className={cn(
-                "w-full resize-none border-none bg-transparent px-4 pt-3.5 pb-3.5 pr-14 text-sm rounded-2xl",
+                "w-full resize-none border-none bg-transparent px-4 pt-3.5 pb-3.5 pr-12 text-sm rounded-xl",
                 "focus-visible:ring-0 focus-visible:ring-offset-0",
                 "placeholder:text-muted-foreground",
                 "min-h-[48px] max-h-[200px]",
                 isLoading && "opacity-50"
               )}
-              style={{ overflow: "hidden" }}
+              style={{ overflow: "hidden", lineHeight: 1.6 }}
             />
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); handleSend(); }}
               disabled={isLoading || !input.trim()}
               className={cn(
-                "absolute right-3 bottom-3 flex h-8 w-8 items-center justify-center rounded-xl transition-all duration-150",
+                "absolute right-2 bottom-2.5 flex h-[30px] w-[30px] items-center justify-center rounded-md transition-all duration-150",
                 input.trim() && !isLoading
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground hover:opacity-90"
                   : "bg-muted text-muted-foreground"
               )}
             >
               <ArrowUpIcon className="h-4 w-4" />
             </button>
           </div>
-          <p className="mt-2 text-center text-xs text-muted-foreground">
+          <p className="mt-2.5 text-center text-xs text-muted-foreground">
             Enter to send · Shift+Enter for new line
           </p>
         </div>
@@ -119,19 +134,19 @@ function EmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) =
   return (
     <div className="flex h-full flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-lg text-center">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-muted">
-          <Image src="/einsteinai.svg" alt="Einstein AI" width={32} height={32} />
+        <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-card shadow-sm ring-1 ring-white/[0.03]">
+          <Image src="/einsteinai.svg" alt="Einstein AI" width={28} height={28} />
         </div>
-        <h2 className="text-2xl font-semibold tracking-tight">Einstein AI</h2>
+        <h2 className="text-xl font-semibold tracking-tight text-foreground">Einstein AI</h2>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
           A language model trained from scratch on data published before April 30, 1905.
         </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap justify-center gap-2.5">
           {SUGGESTIONS.map((s) => (
             <button
               key={s}
               onClick={() => onSuggestionClick(s)}
-              className="rounded-xl border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
+              className="rounded-lg border border-border bg-card px-3.5 py-1.5 text-[13px] text-muted-foreground shadow-sm transition-all duration-200 hover:bg-accent hover:text-foreground hover:shadow-md hover:-translate-y-[1px] active:translate-y-0"
             >
               {s}
             </button>

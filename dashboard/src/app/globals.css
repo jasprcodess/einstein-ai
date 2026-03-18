@@ -54,7 +54,7 @@
   --muted: #2a2a2a;
   --accent: #404040;
   --border: #353535;
-  --radius: 0.75rem;
+  --radius: 0.5rem;
   --chart-1: #a0a0a0;
   --chart-2: #7e9ca0;
   --chart-3: #707070;
@@ -114,9 +114,10 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    letter-spacing: -0.01em; /* Tighter Apple-like typography */
   }
   html {
     @apply font-sans;
-    background: #1a1a1a;
+    background: #111111; /* Darker true background */
   }
 }
