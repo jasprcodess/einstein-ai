@@ -1,10 +1,11 @@
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BarChartSkeleton, ListRowsSkeleton } from "@/components/ui/skeleton";
 
 export default function CorpusPage() {
   return (
-    <div className="mx-auto max-w-5xl p-6 lg:p-8">
+    <div className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Corpus"
         description="All training data must be published on or before April 30, 1905."
@@ -21,16 +22,10 @@ export default function CorpusPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="flex h-32 items-center justify-center rounded-md bg-muted">
-              <p className="text-xs text-muted-foreground">
-                Distribution chart will appear once sources are ingested.
-              </p>
-            </div>
-
+            <BarChartSkeleton />
             <div className="mt-4 rounded-md border border-border bg-secondary px-3 py-2">
               <p className="text-[11px] leading-relaxed text-muted-foreground">
-                Start the corpus pipeline to collect verified pre-1905 texts
-                from public domain archives.
+                Start the corpus pipeline to collect verified pre-1905 texts.
               </p>
             </div>
           </CardContent>
@@ -41,11 +36,7 @@ export default function CorpusPage() {
             <CardTitle className="text-sm font-medium">Source Registry</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex h-48 items-center justify-center rounded-md bg-muted">
-              <p className="text-xs text-muted-foreground">
-                No sources ingested yet.
-              </p>
-            </div>
+            <ListRowsSkeleton rows={5} />
           </CardContent>
         </Card>
       </div>

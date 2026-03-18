@@ -24,24 +24,24 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="relative flex h-screen w-[240px] shrink-0 flex-col">
-      {/* Blur + fade mask */}
+    <aside className="relative flex h-screen w-[240px] shrink-0 flex-col overflow-hidden">
+      {/* Full blur layer */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 backdrop-blur-2xl"
+        className="pointer-events-none absolute inset-0 z-0 backdrop-blur-3xl"
         style={{
-          maskImage: "linear-gradient(to right, black 70%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to right, black 70%, transparent 100%)",
+          maskImage: "linear-gradient(to right, black 0%, black 60%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, black 0%, black 60%, transparent 100%)",
         }}
       />
+      {/* Dark fade overlay */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
-          background: "linear-gradient(to right, #1a1a1a 0%, #1a1a1a 50%, transparent 100%)",
-          opacity: 0.85,
+          background: "linear-gradient(to right, #1a1a1a 0%, #1a1a1a 40%, transparent 100%)",
+          opacity: 0.9,
         }}
       />
 
-      {/* Content */}
       <div className="relative z-10 flex flex-1 flex-col">
         <div className="flex items-center gap-3 px-5 pt-5 pb-4">
           <Image
@@ -71,8 +71,8 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-[13px] transition-colors duration-150",
                   active
-                    ? "bg-accent text-foreground font-medium"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                    ? "bg-accent backdrop-blur-xl text-foreground font-medium"
+                    : "text-muted-foreground hover:bg-accent hover:backdrop-blur-xl hover:text-foreground"
                 )}
               >
                 <item.icon className="h-4 w-4 shrink-0" />

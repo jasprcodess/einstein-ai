@@ -4,18 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { ActivityChartCard } from "@/components/ui/activity-chart-card";
+import { BarChartSkeleton } from "@/components/ui/skeleton";
 import { Play } from "lucide-react";
-
-const PLACEHOLDER_CHART_DATA = [
-  { day: "1", value: 0 },
-  { day: "2", value: 0 },
-  { day: "3", value: 0 },
-  { day: "4", value: 0 },
-  { day: "5", value: 0 },
-  { day: "6", value: 0 },
-  { day: "7", value: 0 },
-];
 
 export function TrainingPanel() {
   return (
@@ -55,13 +45,17 @@ export function TrainingPanel() {
         </CardContent>
       </Card>
 
-      <ActivityChartCard
-        title="Training Loss"
-        totalValue="--"
-        description="Will update during training"
-        data={PLACEHOLDER_CHART_DATA}
-        dropdownOptions={["Loss", "Tokens/sec", "GPU Mem"]}
-      />
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium">Loss Curve</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <BarChartSkeleton />
+          <p className="mt-3 text-center text-[10px] text-muted-foreground">
+            Chart will populate once training starts
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

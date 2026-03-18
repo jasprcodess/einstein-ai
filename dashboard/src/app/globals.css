@@ -83,6 +83,17 @@
   --sidebar-primary-foreground: #1a1a1a;
 }
 
+@keyframes skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@layer utilities {
+  .animate-skeleton {
+    animation: skeleton 1.8s ease-in-out infinite;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

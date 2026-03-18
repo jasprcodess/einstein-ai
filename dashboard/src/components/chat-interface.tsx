@@ -3,7 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowUpIcon, Atom } from "lucide-react";
+import { ArrowUpIcon } from "lucide-react";
+import Image from "next/image";
 import { ChatMessages } from "@/components/chat-messages";
 
 interface Message {
@@ -22,6 +23,7 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const adjustHeight = useCallback(() => {
     const el = textareaRef.current;
@@ -34,6 +36,10 @@ export function ChatInterface() {
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages]);
 
   function handleSend(text?: string) {
     const msg = (text ?? input).trim();
@@ -64,7 +70,7 @@ export function ChatInterface() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {hasMessages ? (
           <ChatMessages messages={messages} />
         ) : (
@@ -72,7 +78,7 @@ export function ChatInterface() {
         )}
       </div>
 
-      <div className="px-4 pb-5 pt-3">
+      <div className="px-3 pb-4 pt-3 sm:px-4">
         <div className="mx-auto max-w-2xl">
           <div className="relative rounded-xl border border-border bg-card">
             <Textarea
@@ -119,22 +125,21 @@ function EmptyState({ onSuggestionClick }: { onSuggestionClick: (text: string) =
     <div className="flex h-full flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-lg text-center">
         <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-muted">
-          <Atom className="h-7 w-7 text-primary" />
+          <Image src="/einsteinai.svg" alt="Einstein AI" width={28} height={28} />
         </div>
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
           Einstein AI
         </h2>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
           A language model trained from scratch on data published before
-          April 30, 1905. Ask about classical mechanics, electrodynamics,
-          optics, thermodynamics, or the ether.
+          April 30, 1905.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {SUGGESTIONS.map((s) => (
             <button
               key={s}
               onClick={() => onSuggestionClick(s)}
-              className="rounded-full border border-border bg-card px-3.5 py-1.5 text-xs text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
+              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
             >
               {s}
             </button>

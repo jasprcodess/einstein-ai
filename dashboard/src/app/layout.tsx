@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Sidebar } from "@/components/sidebar";
+import { MobileNav } from "@/components/mobile-nav";
 import { ShaderBackground } from "@/components/shader-bg";
 import "./globals.css";
 
@@ -25,9 +26,12 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <TooltipProvider>
           <ShaderBackground />
-          <div className="relative z-10 flex h-screen overflow-hidden">
-            <Sidebar />
-            <main className="flex-1 overflow-y-auto">{children}</main>
+          <MobileNav />
+          <div className="relative z-10 flex h-dvh overflow-hidden">
+            <div className="hidden lg:block">
+              <Sidebar />
+            </div>
+            <main className="flex-1 overflow-y-auto pt-12 lg:pt-0">{children}</main>
           </div>
         </TooltipProvider>
       </body>
