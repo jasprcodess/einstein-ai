@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import {
   LayoutDashboard,
   MessageCircle,
@@ -25,21 +24,32 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside
-      className="relative flex h-screen shrink-0 flex-col"
-      style={{ width: 240, overflow: "visible" }}
-    >
-      {/* Progressive blur - extends well past sidebar into content */}
-      <ProgressiveBlur
-        direction="right"
-        blurLayers={14}
-        blurIntensity={5}
-        className="pointer-events-none absolute inset-y-0 left-0 z-0"
-        style={{ width: 360 }}
+    <aside className="relative flex h-screen w-[240px] shrink-0 flex-col">
+      {/* Solid background that fades to transparent on right edge */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: "linear-gradient(to right, #1f1f1f 0%, #1f1f1f 65%, transparent 100%)",
+        }}
+      />
+      {/* Blur layer that also fades right */}
+      <div
+        className="absolute inset-0 z-0 backdrop-blur-2xl"
+        style={{
+          maskImage: "linear-gradient(to right, black 0%, black 50%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, black 0%, black 50%, transparent 100%)",
+        }}
+      />
+      {/* Subtle right border fade */}
+      <div
+        className="absolute inset-y-0 right-0 z-0 w-px"
+        style={{
+          background: "linear-gradient(to bottom, transparent, #353535 30%, #353535 70%, transparent)",
+        }}
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-1 flex-col" style={{ width: 240 }}>
+      <div className="relative z-10 flex flex-1 flex-col">
         <div className="flex items-center gap-3 px-5 pt-5 pb-4">
           <Image
             src="/einsteinai.svg"
@@ -52,7 +62,7 @@ export function Sidebar() {
             <h1 className="text-sm font-semibold tracking-tight text-foreground">
               Einstein AI
             </h1>
-            <p className="text-[10px] font-medium tracking-widest uppercase text-muted-foreground">
+            <p className="text-xs font-medium tracking-widest uppercase text-muted-foreground">
               Pre-1905
             </p>
           </div>
@@ -66,7 +76,7 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-md px-3 py-2 text-[13px] transition-colors duration-150",
+                  "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-200",
                   active
                     ? "bg-accent text-foreground font-medium"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"

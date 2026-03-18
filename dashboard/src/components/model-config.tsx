@@ -25,20 +25,20 @@ export function ModelConfig() {
       </CardHeader>
       <CardContent>
         <div className="space-y-1">
-          {CONFIG.map((c) => (
+          {CONFIG.map((c, i) => (
             <div
               key={c.key}
-              className="flex items-center justify-between rounded-md bg-muted px-3 py-2"
+              className={`flex items-center justify-between rounded-md px-3 py-2 ${i % 2 === 0 ? "bg-muted" : "bg-transparent"}`}
             >
-              <span className="text-[12px] text-muted-foreground">{c.key}</span>
-              <span className="font-mono text-[12px] tabular-nums">{c.value}</span>
+              <span className="text-xs text-muted-foreground">{c.key}</span>
+              <span className="font-mono text-xs tabular-nums">{c.value}</span>
             </div>
           ))}
         </div>
 
         <div className="mt-4 rounded-md border border-border bg-secondary px-3 py-2.5">
-          <p className="text-[11px] font-medium text-primary">From-Scratch Guarantee</p>
-          <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
+          <p className="text-xs font-medium text-primary">From-Scratch Guarantee</p>
+          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
             All weights randomly initialized. No pretrained model, tokenizer,
             or embeddings. Tokenizer trained only on approved pre-1905 corpus.
           </p>

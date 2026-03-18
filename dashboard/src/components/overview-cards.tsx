@@ -13,7 +13,7 @@ const STATUS = [
 export function OverviewCards() {
   return (
     <div className="mt-6 grid gap-4 lg:grid-cols-2">
-      <Card>
+      <Card className="transition-all duration-200 ease-out hover:-translate-y-0.5">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium">System Status</CardTitle>
         </CardHeader>
@@ -21,9 +21,9 @@ export function OverviewCards() {
           {STATUS.map((item) => (
             <div
               key={item.label}
-              className="flex items-center justify-between rounded-md bg-muted px-3 py-2"
+              className="flex items-center justify-between rounded-md bg-muted px-3 py-2 transition-colors duration-150 hover:bg-accent"
             >
-              <span className="text-[13px]">{item.label}</span>
+              <span className="text-sm">{item.label}</span>
               <span className="text-xs text-muted-foreground">{item.value}</span>
             </div>
           ))}
@@ -36,10 +36,10 @@ export function OverviewCards() {
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="rounded-md border border-border bg-secondary px-3 py-2.5">
-            <p className="text-[11px] font-medium text-primary">
+            <p className="text-xs font-medium text-primary">
               Clean-Room Protocol
             </p>
-            <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
+            <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
               All learned components restricted to pre-1905 verified sources.
               No pretrained weights, tokenizers, or external knowledge.
             </p>
