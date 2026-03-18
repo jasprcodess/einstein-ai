@@ -48,12 +48,12 @@
 }
 
 .dark {
-  --card: #191919;
+  --card: rgba(25, 25, 25, 0.8);
   --ring: #ffe0c2;
   --input: #484848;
-  --muted: #222222;
-  --accent: #2a2a2a;
-  --border: #201e18;
+  --muted: rgba(34, 34, 34, 0.7);
+  --accent: rgba(42, 42, 42, 0.7);
+  --border: rgba(255, 224, 194, 0.08);
   --radius: 0.5rem;
   --chart-1: #ffe0c2;
   --chart-2: #393028;
@@ -62,14 +62,14 @@
   --chart-5: #ffe0c1;
   --popover: #191919;
   --primary: #ffe0c2;
-  --sidebar: #18181b;
-  --secondary: #393028;
-  --background: #111111;
+  --sidebar: rgba(24, 24, 27, 0.8);
+  --secondary: rgba(57, 48, 40, 0.7);
+  --background: transparent;
   --foreground: #eeeeee;
   --destructive: #e54d2e;
   --sidebar-ring: #d4d4d8;
-  --sidebar-accent: #27272a;
-  --sidebar-border: #27272a;
+  --sidebar-accent: rgba(39, 39, 42, 0.6);
+  --sidebar-border: rgba(255, 224, 194, 0.08);
   --card-foreground: #eeeeee;
   --sidebar-primary: #1d4ed8;
   --muted-foreground: #b4b4b4;
@@ -88,7 +88,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
+    background: transparent;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   html {

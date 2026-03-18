@@ -4,7 +4,7 @@ import { DitheringShader } from "@/components/ui/dithering-shader";
 
 export function ShaderBackground() {
   return (
-    <div className="pointer-events-none fixed inset-0 z-0">
+    <div className="pointer-events-none fixed inset-0 z-0 h-screen w-screen">
       <DitheringShader
         shape="swirl"
         type="4x4"
