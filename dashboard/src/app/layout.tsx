@@ -27,11 +27,11 @@ export default function RootLayout({
         <TooltipProvider>
           <ShaderBackground />
           <MobileNav />
-          <div className="relative z-10 flex h-dvh overflow-hidden">
-            <div className="hidden lg:block">
+          <div className="relative z-10 flex h-dvh">
+            <div className="hidden lg:block" style={{ overflow: "visible" }}>
               <Sidebar />
             </div>
-            <main className="flex-1 overflow-y-auto pt-12 lg:pt-0">{children}</main>
+            <main className="relative z-20 flex-1 overflow-y-auto pt-12 lg:pt-0">{children}</main>
           </div>
         </TooltipProvider>
       </body>

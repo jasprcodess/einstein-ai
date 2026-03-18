@@ -25,17 +25,21 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="relative flex h-screen w-[240px] shrink-0 flex-col" style={{ overflow: "visible" }}>
-      {/* Aggressive progressive blur - extends well past sidebar width */}
+    <aside
+      className="relative flex h-screen shrink-0 flex-col"
+      style={{ width: 240, overflow: "visible" }}
+    >
+      {/* Progressive blur - extends well past sidebar into content */}
       <ProgressiveBlur
-        direction="left"
+        direction="right"
         blurLayers={14}
         blurIntensity={5}
-        className="pointer-events-none absolute inset-y-0 -left-8 z-0"
-        style={{ width: "340px" }}
+        className="pointer-events-none absolute inset-y-0 left-0 z-0"
+        style={{ width: 360 }}
       />
 
-      <div className="relative z-10 flex flex-1 flex-col">
+      {/* Content */}
+      <div className="relative z-10 flex flex-1 flex-col" style={{ width: 240 }}>
         <div className="flex items-center gap-3 px-5 pt-5 pb-4">
           <Image
             src="/einsteinai.svg"
@@ -62,26 +66,14 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center gap-3 rounded-md px-3 py-2 text-[13px] transition-colors duration-150",
+                  "flex items-center gap-3 rounded-md px-3 py-2 text-[13px] transition-colors duration-150",
                   active
-                    ? "text-foreground font-medium"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-accent text-foreground font-medium"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 )}
               >
-                {/* Each nav item gets its own blur bg when active/hovered */}
-                {active && (
-                  <div className="absolute inset-0 rounded-md overflow-hidden">
-                    <ProgressiveBlur
-                      direction="left"
-                      blurLayers={6}
-                      blurIntensity={3}
-                      className="absolute inset-0"
-                    />
-                    <div className="absolute inset-0 bg-accent" style={{ opacity: 0.5 }} />
-                  </div>
-                )}
-                <item.icon className="relative z-10 h-4 w-4 shrink-0" />
-                <span className="relative z-10">{item.label}</span>
+                <item.icon className="h-4 w-4 shrink-0" />
+                {item.label}
               </Link>
             );
           })}
