@@ -25,15 +25,15 @@ function PulsingDot() {
 export function EvalGates() {
   return (
     <div className="space-y-4">
-      <Card className="bg-card">
+      <Card>
         <CardContent className="flex items-center justify-between p-5">
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-muted p-2.5 ring-1 ring-white/[0.04]">
+            <div className="rounded-lg bg-muted p-2">
               <ShieldCheck className="h-4 w-4 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-sm font-semibold">Release Readiness</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm font-medium">Release Readiness</p>
+              <p className="text-sm text-muted-foreground">
                 All evaluation gates must pass before certification
               </p>
             </div>
@@ -47,13 +47,10 @@ export function EvalGates() {
 
       <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {GATES.map((g) => (
-          <Card
-            key={g.label}
-            className="transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-accent/30"
-          >
-            <CardContent className="p-4">
+          <Card key={g.label} className="transition-all duration-200 ease-out hover:-translate-y-0.5">
+            <CardContent className="p-5">
               <div className="flex items-start justify-between">
-                <div className="rounded-lg bg-muted p-2.5 ring-1 ring-white/[0.04]">
+                <div className="rounded-lg bg-muted p-2">
                   <g.icon className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <Badge variant="secondary" className="gap-1.5 text-xs">
@@ -62,7 +59,7 @@ export function EvalGates() {
                 </Badge>
               </div>
               <p className="mt-3 text-sm font-medium">{g.label}</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">{g.desc}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{g.desc}</p>
             </CardContent>
           </Card>
         ))}

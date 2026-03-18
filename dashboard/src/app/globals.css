@@ -88,9 +88,22 @@
   100% { background-position: -200% 0; }
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
 @layer utilities {
   .animate-skeleton {
     animation: skeleton 1.8s ease-in-out infinite;
+  }
+  .thinking-shimmer {
+    background: linear-gradient(90deg, #808080 0%, #d9d9d9 50%, #808080 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 2s ease-in-out infinite;
   }
 }
 

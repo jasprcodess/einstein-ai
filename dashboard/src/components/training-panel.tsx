@@ -27,43 +27,40 @@ export function TrainingPanel() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex justify-between text-xs">
+          <div className="space-y-1.5">
+            <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Progress</span>
               <span className="font-mono tabular-nums">
-                {m.step > 0 ? `${m.step} / ${m.totalSteps} steps` : "-- / -- steps"}
+                {m.step > 0 ? `${m.step} / ${m.totalSteps}` : "-- / --"}
               </span>
             </div>
-            <Progress
-              value={m.totalSteps > 0 ? (m.step / m.totalSteps) * 100 : 0}
-              className="h-1.5"
-            />
+            <Progress value={m.totalSteps > 0 ? (m.step / m.totalSteps) * 100 : 0} className="h-1.5" />
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {[
               { label: "Loss", value: m.loss > 0 ? m.loss.toFixed(4) : "--" },
-              { label: "LR", value: m.lr > 0 ? m.lr.toExponential(1) : "--" },
+              { label: "Learning Rate", value: m.lr > 0 ? m.lr.toExponential(1) : "--" },
               { label: "Tokens/sec", value: m.tokensPerSec > 0 ? Math.round(m.tokensPerSec).toLocaleString() : "--" },
-              { label: "GPU Mem", value: m.gpuMem || "--" },
+              { label: "GPU Memory", value: m.gpuMem || "--" },
               { label: "Epoch", value: m.epoch > 0 ? m.epoch.toFixed(1) : "--" },
               { label: "ETA", value: m.eta || "--" },
             ].map((metric) => (
-              <div key={metric.label} className="rounded-md bg-muted px-3 py-2">
+              <div key={metric.label} className="rounded-md bg-muted px-3 py-2.5">
                 <p className="text-xs text-muted-foreground">{metric.label}</p>
-                <p className="mt-0.5 font-mono text-sm tabular-nums">{metric.value}</p>
+                <p className="mt-0.5 text-sm font-mono tabular-nums">{metric.value}</p>
               </div>
             ))}
           </div>
 
           {isRunning ? (
-            <Button className="w-full gap-2" variant="destructive" onClick={stop}>
-              <Square className="h-3.5 w-3.5" />
+            <Button className="w-full h-11 gap-2 text-sm" variant="destructive" onClick={stop}>
+              <Square className="h-4 w-4" />
               Stop Training
             </Button>
           ) : (
-            <Button className="w-full gap-2" variant="secondary" onClick={start} disabled={isDone}>
-              {isDone ? <Lock className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+            <Button className="w-full h-11 gap-2 text-sm" variant="secondary" onClick={start} disabled={isDone}>
+              {isDone ? <Lock className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               {isDone ? "Training Complete" : "Start Training"}
             </Button>
           )}
