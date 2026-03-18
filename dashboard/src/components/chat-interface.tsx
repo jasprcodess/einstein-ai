@@ -3,8 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { ArrowUpIcon, Lock, Atom } from "lucide-react";
+import { ArrowUpIcon, Atom } from "lucide-react";
 import { ChatMessages } from "@/components/chat-messages";
 
 interface Message {
@@ -23,13 +22,12 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const modelReady = false;
 
   const adjustHeight = useCallback(() => {
     const el = textareaRef.current;
     if (!el) return;
-    el.style.height = "52px";
-    const next = Math.min(Math.max(52, el.scrollHeight), 200);
+    el.style.height = "44px";
+    const next = Math.min(Math.max(44, el.scrollHeight), 200);
     el.style.height = `${next}px`;
   }, []);
 
@@ -51,7 +49,7 @@ export function ChatInterface() {
     ]);
     setInput("");
     if (textareaRef.current) {
-      textareaRef.current.style.height = "52px";
+      textareaRef.current.style.height = "44px";
     }
   }
 
@@ -74,9 +72,9 @@ export function ChatInterface() {
         )}
       </div>
 
-      <div className="border-t border-border bg-background px-4 pb-4 pt-3">
-        <div className="mx-auto max-w-3xl">
-          <div className="relative rounded-2xl border border-border bg-card">
+      <div className="border-t border-border px-4 pb-5 pt-3">
+        <div className="mx-auto max-w-2xl">
+          <div className="relative rounded-xl border border-border bg-card">
             <Textarea
               ref={textareaRef}
               value={input}
@@ -87,42 +85,28 @@ export function ChatInterface() {
               onKeyDown={handleKeyDown}
               placeholder="Ask about pre-1905 physics..."
               className={cn(
-                "w-full resize-none border-none bg-transparent px-4 pt-3.5 pb-12 text-sm",
+                "w-full resize-none border-none bg-transparent px-4 pt-3 pb-3 pr-12 text-sm",
                 "focus-visible:ring-0 focus-visible:ring-offset-0",
-                "placeholder:text-muted-foreground/60",
-                "min-h-[52px] max-h-[200px]"
+                "placeholder:text-muted-foreground/50",
+                "min-h-[44px] max-h-[200px]"
               )}
               style={{ overflow: "hidden" }}
             />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="gap-1 text-[10px] border-border/60 text-muted-foreground">
-                  <Lock className="h-2.5 w-2.5" />
-                  Pre-1905
-                </Badge>
-                <Badge
-                  variant={modelReady ? "default" : "secondary"}
-                  className="text-[10px]"
-                >
-                  {modelReady ? "Online" : "Offline"}
-                </Badge>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleSend()}
-                className={cn(
-                  "flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-150",
-                  input.trim()
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                )}
-              >
-                <ArrowUpIcon className="h-4 w-4" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => handleSend()}
+              className={cn(
+                "absolute right-3 bottom-3 flex h-7 w-7 items-center justify-center rounded-lg transition-all duration-150",
+                input.trim()
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground"
+              )}
+            >
+              <ArrowUpIcon className="h-3.5 w-3.5" />
+            </button>
           </div>
-          <p className="mt-2 text-center text-[10px] text-muted-foreground/60">
-            Enter to send · Shift+Enter for new line
+          <p className="mt-2 text-center text-[10px] text-muted-foreground/50">
+            Enter to send · Shift+Enter for new line · Pre-1905 data only
           </p>
         </div>
       </div>

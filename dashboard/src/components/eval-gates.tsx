@@ -23,7 +23,7 @@ const GATES = [
 export function EvalGates() {
   return (
     <div className="space-y-4">
-      <Card className="border-border/60">
+      <Card>
         <CardContent className="flex items-center justify-between p-5">
           <div>
             <p className="text-sm font-medium">Release Readiness</p>
@@ -39,7 +39,7 @@ export function EvalGates() {
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {GATES.map((g) => (
-          <Card key={g.label} className="border-border/60">
+          <Card key={g.label}>
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div className="rounded-md bg-muted/60 p-2">

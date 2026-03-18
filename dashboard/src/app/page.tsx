@@ -1,23 +1,21 @@
 import { PageHeader } from "@/components/page-header";
-import { StatCard } from "@/components/stat-card";
 import { OverviewCards } from "@/components/overview-cards";
-import { Database, Cpu, ShieldCheck, BookOpen, Lock, Timer } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Database, Cpu, ShieldCheck, Timer, BookOpen, Lock } from "lucide-react";
+import { StatCard } from "@/components/stat-card";
 
 export default function OverviewPage() {
   return (
-    <div className="mx-auto max-w-[1200px] p-6 lg:p-8">
+    <div className="mx-auto max-w-5xl p-6 lg:p-8">
       <PageHeader
         title="Overview"
         description="Einstein AI control center. A model trained from scratch on pre-1905 data only."
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <StatCard label="Corpus Documents" value="0" sub="Pre-1905 verified sources" icon={Database} />
-        <StatCard label="Model Status" value="Idle" sub="No training runs yet" icon={Cpu} />
-        <StatCard label="Evaluation" value="--" sub="No evals run" icon={ShieldCheck} />
         <StatCard label="Temporal Boundary" value="1905" sub="April 30, 1905 cutoff" icon={Timer} accent />
-        <StatCard label="Blocked Sources" value="0" sub="Post-1905 rejected" icon={Lock} />
-        <StatCard label="Tokens Trained" value="0" sub="From-scratch training" icon={BookOpen} />
+        <StatCard label="Model Status" value="--" sub="Not yet trained" icon={Cpu} />
+        <StatCard label="Evaluation" value="--" sub="Not yet run" icon={ShieldCheck} />
       </div>
 
       <OverviewCards />

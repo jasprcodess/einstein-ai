@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Sidebar } from "@/components/sidebar";
+import { ShaderBackground } from "@/components/shader-bg";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,7 +24,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${inter.variable} font-sans antialiased`}>
         <TooltipProvider>
-          <div className="flex h-screen overflow-hidden">
+          <ShaderBackground />
+          <div className="relative z-10 flex h-screen overflow-hidden">
             <Sidebar />
             <main className="flex-1 overflow-y-auto">{children}</main>
           </div>
