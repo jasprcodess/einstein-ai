@@ -1,7 +1,8 @@
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BarChartSkeleton, ListRowsSkeleton } from "@/components/ui/skeleton";
+import { Database, FileText, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function CorpusPage() {
   return (
@@ -11,7 +12,7 @@ export default function CorpusPage() {
         description="All training data must be published on or before April 30, 1905."
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -22,10 +23,18 @@ export default function CorpusPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <BarChartSkeleton />
+            <div className="flex h-40 flex-col items-center justify-center rounded-md border border-dashed border-border">
+              <Database className="h-8 w-8 text-muted-foreground mb-3" />
+              <p className="text-sm font-medium text-muted-foreground">No sources yet</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Distribution chart will appear once sources are ingested.
+              </p>
+            </div>
+
             <div className="mt-4 rounded-md border border-border bg-secondary px-3 py-2">
               <p className="text-[11px] leading-relaxed text-muted-foreground">
-                Start the corpus pipeline to collect verified pre-1905 texts.
+                Sources will be collected from Project Gutenberg, Internet Archive,
+                Wikisource, and other public domain archives.
               </p>
             </div>
           </CardContent>
@@ -33,10 +42,24 @@ export default function CorpusPage() {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Source Registry</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">Source Registry</CardTitle>
+              <Badge variant="secondary" className="text-[10px]">0 sources</Badge>
+            </div>
           </CardHeader>
           <CardContent>
-            <ListRowsSkeleton rows={5} />
+            <div className="flex h-40 flex-col items-center justify-center rounded-md border border-dashed border-border">
+              <FileText className="h-8 w-8 text-muted-foreground mb-3" />
+              <p className="text-sm font-medium text-muted-foreground">Empty registry</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Add pre-1905 books, papers, and lectures.
+              </p>
+            </div>
+
+            <Button className="mt-4 w-full gap-2" variant="secondary" disabled>
+              <Upload className="h-4 w-4" />
+              Import Sources
+            </Button>
           </CardContent>
         </Card>
       </div>

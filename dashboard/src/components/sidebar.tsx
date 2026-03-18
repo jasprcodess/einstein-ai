@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import {
   LayoutDashboard,
   MessageCircle,
@@ -24,22 +25,14 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="relative flex h-screen w-[240px] shrink-0 flex-col overflow-hidden">
-      {/* Full blur layer */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 backdrop-blur-3xl"
-        style={{
-          maskImage: "linear-gradient(to right, black 0%, black 60%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to right, black 0%, black 60%, transparent 100%)",
-        }}
-      />
-      {/* Dark fade overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background: "linear-gradient(to right, #1a1a1a 0%, #1a1a1a 40%, transparent 100%)",
-          opacity: 0.9,
-        }}
+    <aside className="relative flex h-screen w-[240px] shrink-0 flex-col" style={{ overflow: "visible" }}>
+      {/* Aggressive progressive blur - extends well past sidebar width */}
+      <ProgressiveBlur
+        direction="left"
+        blurLayers={14}
+        blurIntensity={5}
+        className="pointer-events-none absolute inset-y-0 -left-8 z-0"
+        style={{ width: "340px" }}
       />
 
       <div className="relative z-10 flex flex-1 flex-col">
@@ -69,32 +62,30 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-md px-3 py-2 text-[13px] transition-colors duration-150",
+                  "relative flex items-center gap-3 rounded-md px-3 py-2 text-[13px] transition-colors duration-150",
                   active
-                    ? "bg-accent backdrop-blur-xl text-foreground font-medium"
-                    : "text-muted-foreground hover:bg-accent hover:backdrop-blur-xl hover:text-foreground"
+                    ? "text-foreground font-medium"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <item.icon className="h-4 w-4 shrink-0" />
-                {item.label}
+                {/* Each nav item gets its own blur bg when active/hovered */}
+                {active && (
+                  <div className="absolute inset-0 rounded-md overflow-hidden">
+                    <ProgressiveBlur
+                      direction="left"
+                      blurLayers={6}
+                      blurIntensity={3}
+                      className="absolute inset-0"
+                    />
+                    <div className="absolute inset-0 bg-accent" style={{ opacity: 0.5 }} />
+                  </div>
+                )}
+                <item.icon className="relative z-10 h-4 w-4 shrink-0" />
+                <span className="relative z-10">{item.label}</span>
               </Link>
             );
           })}
         </nav>
-
-        <div className="px-4 py-4">
-          <div className="rounded-md border border-border bg-secondary px-3 py-2.5">
-            <div className="flex items-center gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-              <span className="text-[11px] font-medium text-primary">
-                Temporal gate active
-              </span>
-            </div>
-            <p className="mt-1 text-[10px] leading-relaxed text-muted-foreground">
-              All sources after April 30, 1905 are blocked.
-            </p>
-          </div>
-        </div>
       </div>
     </aside>
   );
